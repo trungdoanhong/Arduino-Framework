@@ -1,4 +1,6 @@
 // TaskScheduler.h
+// https://github.com/trungdoanhong/Arduino-Framework
+// Doan Hong Trung | trungdoanhong@gmail.com
 
 #ifndef _TASKSCHEDULER_h
 #define _TASKSCHEDULER_h
