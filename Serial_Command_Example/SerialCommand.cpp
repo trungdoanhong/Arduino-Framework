@@ -43,7 +43,7 @@ void SerialCommand::AddCommand(String message, void(*function)())
    {
      newContainer[i] = cmdContainer[i];
    } 
-   if( cmdContainer != NULL )
+   if( cmdContainer != NULL ) 
    {
      delete[] cmdContainer;
    }   

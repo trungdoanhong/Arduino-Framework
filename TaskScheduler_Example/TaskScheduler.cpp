@@ -25,7 +25,7 @@ void TaskSchedulerClass::Init()
 void TaskSchedulerClass::Add(void(*func)(), uint16_t time)
 {
 	threadNumber++;		// initial number is 0 and increase 1 value before add and function into array
-	Thread *threadTemp = new Thread[threadNumber - 1];	// temporary array use to save olde thread array
+	Thread *threadTemp = new Thread[threadNumber];	// temporary array use to save olde thread array
 
 	for (uint8_t index = 0; index < (threadNumber - 1); index++)
 	{
@@ -37,16 +37,7 @@ void TaskSchedulerClass::Add(void(*func)(), uint16_t time)
 		delete[] ThreadArray;
 	}
 
-	ThreadArray = new Thread[threadNumber];
-	for (uint8_t index = 0; index < (threadNumber - 1); index++)
-	{
-		ThreadArray[index] = threadTemp[index];
-	}
-
-	if (threadTemp != NULL)
-	{
-		delete[] threadTemp;
-	} 
+	ThreadArray = threadTemp;
 	
 	Thread thread;
 	thread.Func = func;
