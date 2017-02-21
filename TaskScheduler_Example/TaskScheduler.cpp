@@ -43,9 +43,14 @@ void TaskSchedulerClass::Add(void(*func)(), uint16_t time)
 		ThreadArray[index] = threadTemp[index];
 	}
 
+	if (threadTemp != NULL)
+	{
+		delete[] threadTemp;
+	} 
+	
 	Thread thread;
 	thread.Func = func;
-	thread.Time = time;
+	thread.Time = time;  
 	thread.CountDown = 0;
 
 	// Add new thread into array
