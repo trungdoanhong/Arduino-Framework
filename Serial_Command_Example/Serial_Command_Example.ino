@@ -87,6 +87,8 @@ void PrintValue12()
 }
 
 void setup() {
+  // In terminal, type value1:56 and print1
+    
   serialCMD = SerialCommand(9600);
   serialCMD.AddCommand("value1", &Value1);
   serialCMD.AddCommand("print1", PrintValue1);
