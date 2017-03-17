@@ -355,8 +355,7 @@ LCDMenuClass LCDMenu;
 DisplayElement::DisplayElement(AbstractMenu* parent, String text, uint8_t col, uint8_t row)
 {
 	parent->AddElement(this);
-	Text = text;
-	IsTextChanged = true;
+	SetText(text);
 	Column = col;
 	Row = row;
 }
@@ -368,6 +367,12 @@ DisplayElement::~DisplayElement()
 DisplayElementType DisplayElement::GetElementType()
 {
 
+}
+
+void DisplayElement::SetText(String text)
+{
+	Text = text;
+	IsTextChanged = true;
 }
 
 #pragma endregion DisplayElement
@@ -487,8 +492,7 @@ VariableText::VariableText(AbstractMenu* parent, float value, uint8_t col, uint8
 {
 	Resolution = 1;
 	Value = value;
-	Text = String((int)Value);
-	IsTextChanged = true;
+	SetText(String((int)Value));
 	IsSelected = false;
 }
 
@@ -500,14 +504,14 @@ DisplayElementType VariableText::GetElementType()
 void VariableText::Decrease()
 {
 	Value = Value - Resolution;
-	Text = String((int)Value);
+	SetText(String((int)Value));
 	IsTextChanged = true;
 }
 
 void VariableText::Increase()
 {
 	Value = Value + Resolution;
-	Text = String((int)Value);
+	SetText(String((int)Value));
 	IsTextChanged = true;
 }
 

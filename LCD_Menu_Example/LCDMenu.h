@@ -54,6 +54,9 @@ public:
 	DisplayElement(AbstractMenu* parent, String text, uint8_t col, uint8_t row);
 	virtual ~DisplayElement();
 	virtual DisplayElementType GetElementType();
+	void SetText(String text);
+	String GetText();
+	void SetPosition();
 
 	bool IsDisplay = true;
 	bool IsTextChanged = false;
