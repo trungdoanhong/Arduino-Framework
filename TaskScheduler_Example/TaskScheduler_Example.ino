@@ -34,11 +34,6 @@ void RunA()
 	Serial.print("-");
 	Serial.print("A");
 	Serial.println(a);
-
-	digitalWrite(13, HIGH);
-	delay(500);
-	digitalWrite(13, LOW);
-	delay(500);
 }
 
 void RunB()
