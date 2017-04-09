@@ -1,6 +1,7 @@
 #include "SerialCommand.h"
+#define BAUDRATE 9600
 
-SerialCommand serialCMD;
+SerialCommand serialCMD(BAUDRATE);
 
 float Value1 = 0;
 
@@ -89,7 +90,7 @@ void PrintValue12()
 void setup() {
   // In terminal, type value1:56 and print1
     
-  serialCMD = SerialCommand(9600);
+  //serialCMD = SerialCommand(9600);
   serialCMD.AddCommand("value1", &Value1);
   serialCMD.AddCommand("print1", PrintValue1);
   serialCMD.AddCommand("value2", &Value2);
