@@ -74,6 +74,8 @@ bool StableButtonClass::IsPressed(uint8_t pin)
 
 		if (isUpArray[index] == true)
 		{
+      if ((millis() - counterArray[index]) < 20)   // avoid noise
+        return false;
 			counterArray[index] = millis();
 			isUpArray[index] = false;
 			return true;
