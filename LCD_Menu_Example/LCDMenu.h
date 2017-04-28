@@ -9,7 +9,7 @@
 	#include "WProgram.h"
 #endif
 
-#include <LiquidCrystal_I2C.h>
+#include "LiquidCrystal_I2C.h"
 #include <string.h>
 #include "StableButton.h"
 
@@ -40,6 +40,8 @@ public:
 
 	DisplayElement** DisEleArray;
 	uint8_t DisEleNumber = 0;
+
+	bool CursorEnable = false;
 
 };
 

@@ -1,12 +1,12 @@
 
 #include "StableButton.h"
 
-#define MODE	4
-#define UP		5
-#define DOWN	6
-#define LEFT  7
+#define MODE	12
+#define UP		11
+#define DOWN	10
+#define LEFT  9
 #define RIGHT 8
-#define OK    9
+#define OK    7
 
 uint8_t ButtonArray[] = { MODE, UP, DOWN, LEFT, RIGHT, OK };
 
