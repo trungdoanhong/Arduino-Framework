@@ -8,15 +8,16 @@ void TaskSchedulerClass::Init()
 {
 	cli();                                  // Turn off global interrupt
 
-	/* Reset Timer/Counter1 */
-	TCCR1A = 0;
-	TCCR1B = 0;
-	TIMSK1 = 0;
+	/* Reset Timer/Counter2 */
+	TCCR2A = 0;
+	TCCR2B = 0;
+	TIMSK2 = 0;
 
-	/* Setup Timer/Counter1 */
-	TCCR1B |= (1 << CS11) | (1 << CS10);    // prescale = 64
-	TCNT1 = 65286;
-	TIMSK1 = (1 << TOIE1);                  // Overflow interrupt enable 
+	/* Setup Timer/Counter2 */
+	TCCR2B |= (1 << CS22);
+	TCCR2B &= ~((1 << CS21) | (1 << CS20));
+	TCNT2 = 7;
+	TIMSK2 = (1 << TOIE2);                  // Overflow interrupt enable 
 
 }
 
@@ -25,7 +26,7 @@ void TaskSchedulerClass::Init()
 void TaskSchedulerClass::Add(void(*func)(), uint16_t time)
 {
 	threadNumber++;		// initial number is 0 and increase 1 value before add and function into array
-	Thread *threadTemp = new Thread[threadNumber];	// temporary array use to save olde thread array
+	Thread *threadTemp = new Thread[threadNumber - 1];	// temporary array use to save olde thread array
 
 	for (uint8_t index = 0; index < (threadNumber - 1); index++)
 	{
@@ -37,11 +38,15 @@ void TaskSchedulerClass::Add(void(*func)(), uint16_t time)
 		delete[] ThreadArray;
 	}
 
-	ThreadArray = threadTemp;
-	
+	ThreadArray = new Thread[threadNumber];
+	for (uint8_t index = 0; index < (threadNumber - 1); index++)
+	{
+		ThreadArray[index] = threadTemp[index];
+	}
+
 	Thread thread;
 	thread.Func = func;
-	thread.Time = time;  
+	thread.Time = time;
 	thread.CountDown = 0;
 
 	// Add new thread into array
@@ -93,8 +98,7 @@ void TaskSchedulerClass::Execute()
 
 	timeCounter = 0;
 
-	if (ThreadArray[nearestThreadOrder].Enough == true)
-		ThreadArray[nearestThreadOrder].Func();		// implement function
+	ThreadArray[nearestThreadOrder].Func();
 
 	for (uint8_t index = 0; index < threadNumber; index++)
 	{
@@ -120,80 +124,9 @@ void TaskSchedulerClass::Execute()
 
 }
 
-void TaskSchedulerClass::Change(void(*func)(), uint16_t time)
+ISR(TIMER2_OVF_vect)
 {
-	if (!this->IsFunctionExit(func))
-	{
-		this->Add(func, time);
-		return;
-	}
-		
-
-	for (uint8_t index = 0; index < threadNumber; index++)
-	{ 
-		if (ThreadArray[index].Func == func)
-		{
-			ThreadArray[index].Time = time;
-			ThreadArray[index].CountDown = time;
-		}
-	}
-}
-
-void TaskSchedulerClass::Stop(void(*func)())
-{
-	for (uint8_t index = 0; index < threadNumber; index++)
-	{
-		if (ThreadArray[index].Func == func)
-		{
-			ThreadArray[index].Enough = false;
-		}
-	}
-}
-
-void TaskSchedulerClass::Delete(void(*func)())
-{
-	if (threadNumber > 0)
-
-	threadNumber--;	
-	Thread *threadTemp = new Thread[threadNumber];	// temporary array use to save olde thread array
-
-	uint8_t index1 = 0;
-	for (uint8_t index2 = 0; index2 < threadNumber + 1; index2++)
-	{
-		if (ThreadArray[index2].Func != func)
-		{
-			threadTemp[index1] = ThreadArray[index2];
-			index1++;
-		}
-	}
-
-	if (ThreadArray != NULL)
-	{
-		delete[] ThreadArray;
-	}
-
-	ThreadArray = new Thread[threadNumber];
-	for (uint8_t index = 0; index < threadNumber; index++)
-	{
-		ThreadArray[index] = threadTemp[index];
-	}
-}
-
-bool TaskSchedulerClass::IsFunctionExit(void(*func)())
-{
-	for ( uint8_t index = 0; index < threadNumber; index++ )
-	{
-		if (ThreadArray[index].Func == func)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-ISR(TIMER1_OVF_vect)
-{
-	TCNT1 = 65286;	// Interrupt function was called every 0.001 s
+	TCNT2 = 7;	// Interrupt function was called every 0.001 s
 	TaskScheduler.Execute();
 }
 
