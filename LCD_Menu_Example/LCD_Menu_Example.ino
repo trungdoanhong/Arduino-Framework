@@ -3,16 +3,16 @@
 #include "LCDMenu.h"
 #include "StableButton.h"
 
-#define RETURN 4
-#define LEFT 5
-#define RIGHT 6
-#define DOWN 7
-#define UP 8
-#define ENTER 9
+#define RETURN 7
+#define LEFT 9
+#define RIGHT 11
+#define DOWN 10
+#define UP 12
+#define ENTER 8
 
 uint8_t ButtonArray[] = { RETURN, LEFT, RIGHT, UP, DOWN, ENTER };
 
-LiquidCrystal_I2C *lcd = new LiquidCrystal_I2C(0x3F, 16, 2);
+LiquidCrystal_I2C *lcd = new LiquidCrystal_I2C(0x27, 16, 2);
 
 Label* lbPinAnalogValue;
 
