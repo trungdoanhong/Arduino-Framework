@@ -2,6 +2,10 @@
 
 SerialCommand serialCMD;
 
+float Value1 = 0;
+float Value2 = 0;
+float Value3 = 0;
+
 void setup() {
   // In terminal, type value1:56 and print1
     
@@ -18,21 +22,15 @@ void loop() {
   serialCMD.Execute();
 }
 
-float Value1 = 0;
-
 void PrintValue1()
 {
   Serial.println(Value1);
 }
 
-float Value2 = 0;
-
 void PrintValue2()
 {
   Serial.println(Value2);
 }
-
-float Value3 = 0;
 
 void PrintValue3()
 {
