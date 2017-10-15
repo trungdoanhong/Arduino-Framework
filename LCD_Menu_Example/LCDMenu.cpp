@@ -172,6 +172,12 @@ void LCDMenuClass::SetCurrentMenu(AbstractMenu* menu)
 
 }
 
+void LCDMenuClass::ReLoadMenu()
+{
+	LCD->clear();
+	SetCurrentMenu(currentMenu);
+}
+
 void LCDMenuClass::MoveCursorLeft()
 {
 	if (blinkVariableText != NULL)
@@ -278,12 +284,6 @@ void LCDMenuClass::ExecuteEffect()
 	
 }
 
-void LCDMenuClass::ReLoadMenu()
-{
-	LCD->clear();
-	SetCurrentMenu(currentMenu);
-}
-
 void LCDMenuClass::MoveCursorUp()
 {
 	if (blinkVariableText == NULL)
@@ -325,6 +325,8 @@ void LCDMenuClass::Enter()
 				return;							
 				break;
 			case FUNCTIONTEXT:
+				if (((FunctionText*)procEle)->Function == NULL)
+					break;
 				((FunctionText*)procEle)->Function();
 				break;
 			case VARIABLETEXT:
@@ -408,8 +410,8 @@ void DisplayElement::SetText(String text)
 
 void DisplayElement::SetPosition(uint8_t col, uint8_t row)
 {
-	Row = row;
 	Column = col;
+	Row = row;
 }
 
 #pragma endregion DisplayElement
@@ -547,18 +549,21 @@ VariableText::VariableText(AbstractMenu* parent, float value, uint8_t col, uint8
 		}
 	}
 
-	Value = value;
+	mValue = value;
 	if ((Resolution - (int)Resolution) == 0)
 	{
-		SetText(String((int)Value));
+		SetText(String((int)mValue));
 	}
 	else
 	{
-		SetText(String(Value));
+		SetText(String(mValue));
 	}
 	IsSelected = false;
 
-	
+	HandleWhenValueChange = NULL;
+
+	pExternalValue_float = NULL;
+	pExternalValue_int = NULL;
 }
 
 DisplayElementType VariableText::GetElementType()
@@ -566,44 +571,117 @@ DisplayElementType VariableText::GetElementType()
 	return VARIABLETEXT;
 }
 
+void VariableText::SetExternalValue(float* pExVal)
+{
+	this->pExternalValue_float = pExVal;
+}
+
+void VariableText::SetExternalValue(uint16_t* pExVal)
+{
+	this->pExternalValue_int = pExVal;
+}
+
+void VariableText::SetValue(float value)
+{ 
+	mValue = value;
+
+	if (pExternalValue_float != NULL)
+	{
+		*pExternalValue_float = mValue;
+	}
+	if (pExternalValue_int != NULL)
+	{
+		*pExternalValue_int = mValue;
+	}
+
+	if (HandleWhenValueChange != NULL)
+	{
+		HandleWhenValueChange();
+	}
+	
+	if ((Resolution - (int)Resolution) == 0)
+	{
+		SetText(String((int)mValue));
+	}
+	else
+	{
+		SetText(String(mValue));
+	}
+}
+
+float VariableText::GetValue()
+{
+	return mValue;
+}
+
 void VariableText::Decrease()
 {
-	Value = Value - Resolution;
+	mValue = mValue - Resolution;
 
-	if (Value < Min && Min < Max)
+	if (mValue < Min && Min < Max)
 	{
-		Value = Max;
+		mValue = Max;
+	}
+
+	if (pExternalValue_float != NULL)
+	{
+		*pExternalValue_float = mValue;
+	}
+
+	if (pExternalValue_int != NULL)
+	{
+		*pExternalValue_int = mValue;
+	}
+
+	if (HandleWhenValueChange != NULL)
+	{
+		HandleWhenValueChange();
 	}
 
 	if ((Resolution - (int)Resolution) == 0)
 	{
-		SetText(String((int)Value));
+		SetText(String((int)mValue));
 	}
 	else
 	{
-		SetText(String(Value));
+		SetText(String(mValue));
 	}
-	IsTextChanged = true;
+
+	
 }
 
 void VariableText::Increase()
 {
-	Value = Value + Resolution;
+	mValue = mValue + Resolution;
 
-	if (Value > Max && Min < Max)
+	if (mValue > Max && Min < Max)
 	{
-		Value = Min;
+		mValue = Min;
+	}
+
+	if (pExternalValue_float != NULL)
+	{
+		*pExternalValue_float = mValue;
+	}
+
+	if (pExternalValue_int != NULL)
+	{
+		*pExternalValue_int = mValue;
+	}
+
+	if (HandleWhenValueChange != NULL)
+	{
+		HandleWhenValueChange();
 	}
 
 	if ((Resolution - (int)Resolution) == 0)
 	{
-		SetText(String((int)Value));
+		SetText(String((int)mValue));
 	}
 	else
 	{
-		SetText(String(Value));
+		SetText(String(mValue));
 	}
-	IsTextChanged = true;
 }
 
 void VariableText::SetText(String text)

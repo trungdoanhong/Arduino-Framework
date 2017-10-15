@@ -65,6 +65,8 @@ public:
 	uint8_t Row;
 	String Text;
 	String oldText;
+private:
+
 
 };
 
@@ -94,12 +96,20 @@ public:
 	void Increase();
 	DisplayElementType GetElementType();
 	void SetText(String text);
-
+	void SetValue(float value);
+	float GetValue();
+	void SetExternalValue(float* pExVal);
+	void SetExternalValue(uint16_t* pExVal);
+	
 	float Resolution;
-	float Value;
 	bool IsSelected;
 	float Max;
 	float Min;
+	void(*HandleWhenValueChange)(void);
+private:
+	float* pExternalValue_float;
+	uint16_t* pExternalValue_int;
+	float mValue;
 };
 
 class FunctionText : public DisplayElement
