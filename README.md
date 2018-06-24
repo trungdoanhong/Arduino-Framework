@@ -5,4 +5,5 @@ Current library :
 - SerialCommand : Execute function and save value when receiving command or data from serial port. It better than other version before
 - StableButton : Make your buttons in your circuit working like PC keyboard works. Stable and no noise.
 - LCDMenu : It have "Form" and "Widgets" like Qt or Winform. Easy to use, you can creat awesome user interface on LCD ( should use module I2C and LiquidCrystal I2C library by Frank de Brabander )
+- VirtualTimer : Creat many timer interrupt function from timer 2 ( Arduino UNO ). Resolution unit is micro seccond.
 trungdoanhong@gmail.com
