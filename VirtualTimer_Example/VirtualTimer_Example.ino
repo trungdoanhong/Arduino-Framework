@@ -32,7 +32,7 @@ void setup()
 
 	VirtualTimer.Init();
 
-	VirtualTimer.Add(RunB, 50);		// us
+	VirtualTimer.Add(RunB, 50);		// uni is micro seconds
 	VirtualTimer.Add(RunC, 300);
 	VirtualTimer.Add(RunD, 400);
 	VirtualTimer.Add(RunE, 5000);
