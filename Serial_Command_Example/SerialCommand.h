@@ -6,15 +6,17 @@
 
 struct Command
 {
-  String message;
+  String message = "";
   void(*function)() = NULL;
   float* value = NULL;
+  char* contain;
 };
 
 class SerialCommand
 {
 public:
   HardwareSerial* _Serial;
+  HardwareSerial* ForwardSerial = NULL;
   Command* cmdContainer;
   uint8_t cmdCounter = 0;
   
@@ -24,7 +26,9 @@ public:
   
   void AddCommand(String message, void(*function)());
   void AddCommand(String message, float* value);
+  void AddCommand(String message, char* contain);
   void Execute();
+  void ForwardData(HardwareSerial*, uint16_t);
   
 private:
   boolean stringComplete;
