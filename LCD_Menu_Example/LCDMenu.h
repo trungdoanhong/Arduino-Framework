@@ -16,9 +16,9 @@
 enum DisplayElementType
 {
 	SUBMENU = 0, 
-	LABEL = 1,
+	LABEL = 1,	
 	FUNCTIONTEXT = 2,
-	VARIABLETEXT = 3
+	VARIABLETEXT = 3,
 };
 
 class DisplayElement;
@@ -58,6 +58,7 @@ public:
 	virtual DisplayElementType GetElementType();
 	void SetText(String text);
 	void SetPosition(uint8_t col, uint8_t row);
+	AbstractMenu* GetParent();
 
 	bool IsDisplay = true;
 	bool IsTextChanged = false;
@@ -66,7 +67,7 @@ public:
 	String Text;
 	String oldText;
 private:
-
+	AbstractMenu* parentMenu;
 
 };
 
@@ -118,7 +119,7 @@ public:
 	FunctionText(AbstractMenu* parent, String text, uint8_t col, uint8_t row);
 	DisplayElementType GetElementType();
 
-	void (*Function)(void);
+	void (*Function)(DisplayElement*);
 };
 
 class LCDMenuClass

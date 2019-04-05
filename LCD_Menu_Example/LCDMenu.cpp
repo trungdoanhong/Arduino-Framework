@@ -324,10 +324,11 @@ void LCDMenuClass::Enter()
 				UpdateScreen();
 				return;							
 				break;
-			case FUNCTIONTEXT:
+			case 
+				FUNCTIONTEXT:
 				if (((FunctionText*)procEle)->Function == NULL)
 					break;
-				((FunctionText*)procEle)->Function();
+				((FunctionText*)procEle)->Function(procEle);
 				break;
 			case VARIABLETEXT:
 				blinkVariableText = (VariableText*)procEle;
@@ -387,6 +388,7 @@ LCDMenuClass LCDMenu;
 DisplayElement::DisplayElement(AbstractMenu* parent, String text, uint8_t col, uint8_t row)
 {
 	parent->AddElement(this);
+	parentMenu = parent;
 	SetText(text);
 	Column = col;
 	Row = row;
@@ -394,6 +396,11 @@ DisplayElement::DisplayElement(AbstractMenu* parent, String text, uint8_t col, u
 
 DisplayElement::~DisplayElement()
 {
+}
+
+AbstractMenu* DisplayElement::GetParent()
+{
+	return parentMenu;
 }
 
 DisplayElementType DisplayElement::GetElementType()
